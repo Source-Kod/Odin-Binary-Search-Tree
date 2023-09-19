@@ -80,6 +80,21 @@ function tree(arr) {
     return currentNode;
   };
 
+  tree.levelOrder = (func = null) => {
+    const arrayOfNodeValues = [];
+    const levelOrderQueue = [tree.root];
+
+    while (levelOrderQueue.length > 0) {
+      const currentNode = levelOrderQueue[0];
+      arrayOfNodeValues.push(currentNode.data);
+      if (currentNode.left) levelOrderQueue.push(currentNode.left);
+      if (currentNode.right) levelOrderQueue.push(currentNode.right);
+      if (func) func(currentNode);
+      levelOrderQueue.shift();
+    }
+    if (func === null) return arrayOfNodeValues;
+  };
+
   return tree;
 }
 
@@ -143,5 +158,5 @@ function removeDuplicates(arr) {
 let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // myTree.insert(69);
 // myTree.delete(324);
-console.log(myTree.find(5));
+myTree.levelOrder(console.log);
 prettyPrint(myTree.root);
