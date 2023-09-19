@@ -5,8 +5,8 @@ function tree(arr) {
     if (!arr.length) {
       return null;
     }
-    arr = mergeSort(arr);
     arr = removeDuplicates(arr);
+    arr = mergeSort(arr);
     let mid = Math.floor(arr.length / 2);
     let root = node();
     root.data = arr[mid];
@@ -17,15 +17,78 @@ function tree(arr) {
 
   tree.root = tree.buildTree(arr);
 
+  tree.insert = (data, currentNode = tree.root) => {
+    if (currentNode === null) {
+      currentNode = node(data);
+      return currentNode;
+    }
+
+    if (data < currentNode.data)
+      currentNode.left = tree.insert(data, currentNode.left);
+
+    if (data > currentNode.data)
+      currentNode.right = tree.insert(data, currentNode.right);
+
+    return currentNode;
+  };
+
+  tree.delete = (data, currentNode = tree.root) => {
+    if (currentNode === null) {
+      return null;
+    }
+
+    if (data < currentNode.data) {
+      currentNode.left = tree.delete(data, currentNode.left);
+      return currentNode;
+    }
+
+    if (data > currentNode.data) {
+      currentNode.right = tree.delete(data, currentNode.right);
+      return currentNode;
+    }
+
+    // If the data is equal to the current node's data, this is the node to delete
+    if (currentNode.left === null) {
+      return currentNode.right;
+    }
+
+    if (currentNode.right === null) {
+      return currentNode.left;
+    }
+
+    // Node with two children, find the in-order successor (smallest in the right subtree)
+    currentNode.data = findMinValue(currentNode.right);
+
+    // Delete the in-order successor
+    currentNode.right = tree.delete(currentNode.data, currentNode.right);
+
+    return currentNode;
+  };
+
+  tree.find = (data, currentNode = tree.root) => {
+    if (currentNode === null) {
+      return null;
+    }
+
+    if (data < currentNode.data) {
+      return tree.find(data, currentNode.left);
+    }
+    if (data > currentNode.data) {
+      return tree.find(data, currentNode.right);
+    }
+
+    return currentNode;
+  };
+
   return tree;
 }
 
-function node() {
+function node(data = null, left = null, right = null) {
   const node = {};
 
-  node.data = null;
-  node.left = null;
-  node.right = null;
+  node.data = data;
+  node.left = left;
+  node.right = right;
 
   return node;
 }
@@ -78,4 +141,7 @@ function removeDuplicates(arr) {
 }
 
 let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+// myTree.insert(69);
+// myTree.delete(324);
+console.log(myTree.find(5));
 prettyPrint(myTree.root);
