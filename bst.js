@@ -95,6 +95,18 @@ function tree(arr) {
     if (func === null) return arrayOfNodeValues;
   };
 
+  tree.inorder = (currentNode = tree.root, func = null, arr = []) => {
+    //base case
+    if (!currentNode) return;
+
+    tree.inorder(currentNode.left, func, arr);
+    arr.push(currentNode.data);
+    if (func) func(currentNode);
+    tree.inorder(currentNode.right, func, arr);
+
+    if (!func) return arr;
+  };
+
   return tree;
 }
 
@@ -158,5 +170,6 @@ function removeDuplicates(arr) {
 let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // myTree.insert(69);
 // myTree.delete(324);
-myTree.levelOrder(console.log);
+// myTree.levelOrder(console.log);
+console.log(myTree.inorder());
 prettyPrint(myTree.root);
