@@ -130,6 +130,22 @@ function tree(arr) {
     return arrayOfNodeValues;
   };
 
+  tree.postorder = (
+    func = null,
+    currentNode = tree.root,
+    arrayOfNodeValues = [],
+  ) => {
+    //base case
+    if (!currentNode) return;
+
+    tree.postorder(func, currentNode.left, arrayOfNodeValues);
+    tree.postorder(func, currentNode.right, arrayOfNodeValues);
+    arrayOfNodeValues.push(currentNode.data);
+    if (func) func(currentNode);
+
+    return arrayOfNodeValues;
+  };
+
   return tree;
 }
 
@@ -194,7 +210,8 @@ let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // myTree.insert(69);
 // myTree.delete(324);
 // myTree.levelOrder(console.log);
-// console.log(myTree.inorder());
+console.log(myTree.inorder());
 console.log(myTree.preorder());
+console.log(myTree.postorder());
 // console.log(myTree.levelOrder(console.log));
 prettyPrint(myTree.root);
