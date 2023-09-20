@@ -156,8 +156,15 @@ function tree(arr) {
     return 1 + Math.max(tree.depth(node.left), tree.depth(node.right));
   };
 
-  tree.isBalanced = () => {
-    return tree.height(tree.root) >= 0;
+  tree.isBalanced = (node = tree.root) => {
+    if (node === null) return true;
+
+    const leftHeight = tree.height(node.left);
+    const rightHeight = tree.height(node.right);
+
+    if (Math.abs(leftHeight - rightHeight) > 1) return false;
+
+    return tree.isBalanced(node.left) && tree.isBalanced(node.right);
   };
 
   tree.rebalance = () => {
@@ -224,15 +231,45 @@ function removeDuplicates(arr) {
   return arr;
 }
 
-let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+function getRandomNumbers(count, min = 1, max = 99) {
+  const randomNumbers = [];
+  for (let i = 0; i < count; i++) {
+    const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    randomNumbers.push(randomNumber);
+  }
+  return randomNumbers;
+}
+
+// let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 // myTree.delete(324);
 // myTree.levelOrder(console.log);
 // console.log(myTree.inorder());
 // console.log(myTree.preorder());
 // console.log(myTree.postorder());
 // console.log(myTree.levelOrder(console.log));
-myTree.insert(103);
-myTree.insert(122);
-myTree.insert(177);
-myTree.rebalance();
-prettyPrint(myTree.root);
+// myTree.insert(177);
+// myTree.rebalance();
+// prettyPrint(myTree.root);
+
+//driver script
+let scriptTree = tree(getRandomNumbers(22));
+console.log("is balanced? " + scriptTree.isBalanced());
+console.log("level order: " + scriptTree.levelOrder());
+console.log("pre order: " + scriptTree.preorder());
+console.log("post order: " + scriptTree.postorder());
+console.log("in order: " + scriptTree.inorder());
+scriptTree.insert(101);
+scriptTree.insert(127);
+scriptTree.insert(188);
+scriptTree.insert(135);
+scriptTree.insert(174);
+scriptTree.insert(173);
+scriptTree.insert(175);
+console.log("is balanced? " + scriptTree.isBalanced());
+scriptTree.rebalance();
+console.log("is balanced? " + scriptTree.isBalanced());
+prettyPrint(scriptTree.root);
+console.log("level order: " + scriptTree.levelOrder());
+console.log("pre order: " + scriptTree.preorder());
+console.log("post order: " + scriptTree.postorder());
+console.log("in order: " + scriptTree.inorder());
