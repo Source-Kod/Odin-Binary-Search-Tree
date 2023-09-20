@@ -146,6 +146,24 @@ function tree(arr) {
     return arrayOfNodeValues;
   };
 
+  tree.height = (node) => {
+    if (node === null) return -1;
+    return 1 + Math.max(tree.height(node.left), tree.height(node.right));
+  };
+
+  tree.depth = (node) => {
+    if (node === null) return -1;
+    return 1 + Math.max(tree.depth(node.left), tree.depth(node.right));
+  };
+
+  tree.isBalanced = () => {
+    return tree.height(tree.root) >= 0;
+  };
+
+  tree.rebalance = () => {
+    tree.root = tree.buildTree(tree.preorder());
+  };
+
   return tree;
 }
 
@@ -207,11 +225,14 @@ function removeDuplicates(arr) {
 }
 
 let myTree = tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-// myTree.insert(69);
 // myTree.delete(324);
 // myTree.levelOrder(console.log);
-console.log(myTree.inorder());
-console.log(myTree.preorder());
-console.log(myTree.postorder());
+// console.log(myTree.inorder());
+// console.log(myTree.preorder());
+// console.log(myTree.postorder());
 // console.log(myTree.levelOrder(console.log));
+myTree.insert(103);
+myTree.insert(122);
+myTree.insert(177);
+myTree.rebalance();
 prettyPrint(myTree.root);
